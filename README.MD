@@ -4,7 +4,7 @@ Dependencies
 ======================
 In order to run the projects the following dependencies are required.
 
-* [Apache KAFKA](https://kafka.apache.org/downloads) - A Distributed Streaming Platform
+* [Apache Kafka](https://kafka.apache.org/downloads) - A Distributed Streaming Platform
 * [Apache Cassandra](http://cassandra.apache.org/download/) - NoSQL database management system designed to handle large amounts of data across many commodity servers
 
 
@@ -61,10 +61,10 @@ And start it using:
 After starting sensor simulator, simulated sensor data will be generated and sent to the specified kafka topic. The consumer will receive the data and add it to cassandra.
 
 Finally let's build and run the web-service project.
-  
-  cd $PROJECT_ROOT/web-service
-
-  mvn jetty:run
+	
+	cd $PROJECT_ROOT/web-service
+	
+	mvn jetty:run
 
 The above command will compile and deploy the web-service project.
 
