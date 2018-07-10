@@ -13,12 +13,15 @@ Build/Run Instructions
 
 After installing both kafka and cassandra let's now create the keyspace and column family on cassandra.
 First start cassandra:
+	
 	sh $CASSANDRA_HOME/bin/cassandra
 
 Execute the CQL script to 
+	
 	sh $CASSANDRA_HOME/bin/cqlsh -f $PROJECT_ROOT/data-access/src/cassandra/exec.cql 
 
 Now create the kafka topic 
+	
 	sh $KAFKA_HOME/bin/kafka-topics --zookeeper 127.0.0.1:2181 --create --topic iot_reads --partitions 5 --replication-factor 1
 
 The partitions parameter it is an important configuration which defines the level of parallelism allowed for the topic. For instance, if the partitions value is 5
