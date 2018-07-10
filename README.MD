@@ -46,9 +46,12 @@ In order to start the sensor simulator
 	java -jar target/sensor-simulator-1.0-SNAPSHOT-jar-with-dependencies.jar config.properties
 
 The config.properties should define the following configurations (An example was added in the $PROJECT_ROOT.
-    topic.name -> The Kafka topic name 
-	bootstrap.servers -> A comma separated list of servers:ports
-	sensor.id -> The id of the sensor it will be used to identify the simulated sensor
+    
+    - `topic.name` The Kafka topic name 
+
+	- `bootstrap.servers`  A comma separated list of servers:ports
+
+	- `sensor.id` The id of the sensor, it will be used to identify the simulated sensor
 
 If you to simulate multiple sensors change the sensor.id configuration and run the command again.
 
