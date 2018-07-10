@@ -4,8 +4,8 @@ Dependencies
 ======================
 In order to run the projects the following dependencies are required.
 
-apache kafka 2.11-1.0.1 -> https://kafka.apache.org/downloads
-apache cassandra 3.11.2 -> http://cassandra.apache.org/download/
+* [Apache KAFKA](https://kafka.apache.org/downloads) - A Distributed Streaming Platform
+* [Apache Cassandra](http://cassandra.apache.org/download/) - NoSQL database management system designed to handle large amounts of data across many commodity servers
 
 
 Build/Run Instructions
