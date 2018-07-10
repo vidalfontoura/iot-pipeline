@@ -27,11 +27,11 @@ The topic parameter is the topic name and should match with the topic name used 
 
 Let's now build the sensor-simulator project.
 	
-	```
+
 	cd $PROJECT_ROOT/sensor-simulator
 
     mvn clean compile assembly:single
-    ```
+    
 
 In order to start the sensor simulator 
 	
