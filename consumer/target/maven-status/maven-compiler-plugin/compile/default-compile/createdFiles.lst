@@ -1,0 +1,6 @@
+com/relay42/event/consumer/EventConsumer.class
+com/relay42/serializer/JacksonReadingSerializer$SerializationHelper.class
+com/relay42/conf/ConsumerModule.class
+com/relay42/MainConsumer.class
+com/relay42/serializer/JacksonReadingSerializer.class
+com/relay42/event/consumer/EventConsumerImpl.class
