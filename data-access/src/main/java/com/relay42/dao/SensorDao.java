@@ -27,27 +27,27 @@ public class SensorDao implements Dao {
         this.session = session;
     }
 
-    public void save(SensorData sensorData) {
+    public void saveSensorData(SensorData sensorData) {
 
         mapper.saveAsync(sensorData);
     }
 
-    public SensorData queryById(String id) {
+    public SensorData querySensorDataById(String id) {
 
         return mapper.get(id);
     }
 
-    public List<SensorData> queryByIds(List<String> ids) {
+    public List<SensorData> querySensorDataByIds(List<String> ids) {
 
         List<SensorData> lists = Lists.newArrayList();
         for (String i : ids) {
-            SensorData queryById = this.queryById(i);
+            SensorData queryById = this.querySensorDataById(i);
             lists.add(queryById);
         }
         return lists;
     }
 
-    public List<SensorData> queryByTimeFrame(String sensorId, Date start, Date end) {
+    public List<SensorData> querySensorDataByTimeFrame(String sensorId, Date start, Date end) {
 
         try {
             

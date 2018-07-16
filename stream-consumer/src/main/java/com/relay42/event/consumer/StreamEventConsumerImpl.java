@@ -44,7 +44,7 @@ public class StreamEventConsumerImpl implements EventConsumer {
             .groupByKey()
             .aggregate(SensorStats::new, (k, v, sensorStats) -> {
                 LOGGER.info("Receiving sensor readings from sensor id: " + k);
-                    // dao.save(v);
+                dao.save(v);
                 sensorStats.add(v);
                 return sensorStats;
             }, TimeWindows.of(5000).advanceBy(1000), new SensorStatsSerde(),

@@ -1,5 +1,0 @@
-com/relay42/domain/SensorData.class
-com/relay42/config/PersistenceModule.class
-com/relay42/codec/DateCodec.class
-com/relay42/dao/Dao.class
-com/relay42/dao/SensorDao.class

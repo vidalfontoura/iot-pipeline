@@ -19,17 +19,19 @@ public class EventProducerImpl implements EventProducer {
     private static final Logger LOGGER = Logger.getLogger(EventProducerImpl.class.getName());
 
     private static final String TOPIC_NAME_KEY = "topic.name";
-    private static final String SENSOR_ID = "sensor.id";
 
-    Random random = new Random();
+    private final Random random;
 
     private Producer<String, SensorData> kafkaProducer;
     private Properties props;
+    private String sensorId;
 
-    public EventProducerImpl(Properties props) {
+    public EventProducerImpl(Properties props, String sensorId) {
 
         this.kafkaProducer = new KafkaProducer<>(props);
         this.props = props;
+        this.random = new Random();
+        this.sensorId = sensorId;
     }
 
 
@@ -50,11 +52,14 @@ public class EventProducerImpl implements EventProducer {
         while (true) {
             SensorData sensorData = new SensorData();
 
-            sensorData.setSensorId(props.getProperty(SENSOR_ID));
+            sensorData.setSensorId(sensorId);
             sensorData.setReadingDate(new Date());
             sensorData.setReadingValue(random.nextDouble());
-            record = new ProducerRecord<>(props.getProperty(TOPIC_NAME_KEY), sensorData);
 
+            record =
+                new ProducerRecord<>(props.getProperty(TOPIC_NAME_KEY),
+                    sensorId,
+                    sensorData);
             kafkaProducer.send(record, new Callback() {
 
                 @Override
@@ -68,7 +73,7 @@ public class EventProducerImpl implements EventProducer {
 
                 }
             });
-
+            Thread.sleep(1000);
         }
     }
 

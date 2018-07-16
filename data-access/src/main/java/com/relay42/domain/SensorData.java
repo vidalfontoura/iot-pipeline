@@ -1,6 +1,7 @@
 package com.relay42.domain;
 
 import com.datastax.driver.mapping.annotations.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
@@ -11,7 +12,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SensorData {
 
     private String sensorId;
+
     private double readingValue;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+                pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
     private Date readingDate;
 
     public String getSensorId() {
@@ -44,5 +49,11 @@ public class SensorData {
         this.readingDate = readingDate;
     }
 
+    @Override
+    public String toString() {
+
+        return "SensorData [sensorId=" + sensorId + ", readingValue="
+            + readingValue + ", readingDate=" + readingDate + "]";
+    }
 
 }

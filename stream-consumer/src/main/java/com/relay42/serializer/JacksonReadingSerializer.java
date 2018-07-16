@@ -15,7 +15,7 @@ import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
 
 /**
- * (De)serializes SensorData using Jackson.
+ * (De)serializes SensorReadings using Jackson.
  */
 public class JacksonReadingSerializer implements Closeable, AutoCloseable, Serializer<SensorData>, Deserializer<SensorData> {
     private ObjectMapper mapper;
@@ -66,15 +66,15 @@ public class JacksonReadingSerializer implements Closeable, AutoCloseable, Seria
     }
 
     public static class SerializationHelper {
-        public String sensorId;
-        public Date readingDate;
-        public double readingValue;
+        public String id;
+        public Date date;
+        public double value;
 
         public static SerializationHelper from(SensorData sensorData) {
             SerializationHelper helper = new SerializationHelper();
-            helper.sensorId = sensorData.getSensorId();
-            helper.readingValue = sensorData.getReadingValue();
-            helper.readingDate = sensorData.getReadingDate();
+            helper.id = sensorData.getSensorId();
+            helper.value = sensorData.getReadingValue();
+            helper.date = sensorData.getReadingDate();
 
             return helper;
         }
@@ -82,9 +82,9 @@ public class JacksonReadingSerializer implements Closeable, AutoCloseable, Seria
         public SensorData to() {
 
             SensorData sensorData = new SensorData();
-            sensorData.setReadingValue(readingValue);
-            sensorData.setReadingDate(readingDate);
-            sensorData.setSensorId(sensorId);
+            sensorData.setReadingValue(value);
+            sensorData.setReadingDate(date);
+            sensorData.setSensorId(id);
             return sensorData;
         }
     }
