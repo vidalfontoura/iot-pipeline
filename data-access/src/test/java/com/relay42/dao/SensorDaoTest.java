@@ -36,7 +36,7 @@ public class SensorDaoTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date start = sdf.parse("2018-07-07 13:41:36");
         Date end = sdf.parse("2018-07-07 13:41:38");
-        List<SensorData> queryByTimeFrame = dao.queryByTimeFrame("fbdb9aba-c6db-46d3-985d-dd20137e160a", start, end);
+        List<SensorData> queryByTimeFrame = dao.querySensorDataByTimeFrame("fbdb9aba-c6db-46d3-985d-dd20137e160a", start, end);
         for (SensorData sensorData : queryByTimeFrame) {
             System.out.print(sensorData.getReadingDate());
             System.out.println(" " + sensorData.getReadingValue());

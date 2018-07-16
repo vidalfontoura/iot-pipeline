@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface Dao {
 
-    void save(SensorData sensorData);
+    void saveSensorData(SensorData sensorData);
 
-    SensorData queryById(String id);
+    SensorData querySensorDataById(String id);
 
-    List<SensorData> queryByIds(List<String> ids);
+    List<SensorData> querySensorDataByIds(List<String> ids);
     
-    List<SensorData> queryByTimeFrame(String sensorId, Date start, Date end);
+    List<SensorData> querySensorDataByTimeFrame(String sensorId, Date start, Date end);
 }

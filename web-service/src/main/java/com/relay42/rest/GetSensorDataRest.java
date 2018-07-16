@@ -16,6 +16,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 @Path("sensor")
 public class GetSensorDataRest {
@@ -32,28 +33,26 @@ public class GetSensorDataRest {
     @POST
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-    public GetSensorDataResponse getSensorStatistics(GetSensorDataRequest query) {
+    public Response getSensorStatistics(GetSensorDataRequest query) {
 
         String sensorId = query.getSensorId();
         Date startDate = query.getStart();
         Date endDate = query.getEnd();
 
-        List<SensorData> queryByTimeFrame = dao.queryByTimeFrame(sensorId, startDate, endDate);
+        List<SensorData> queryByTimeFrame =
+            dao.querySensorDataByTimeFrame(sensorId, startDate, endDate);
 
-        DoubleSummaryStatistics summaryStatistics = queryByTimeFrame.stream().mapToDouble(v -> v.getReadingValue()).summaryStatistics();
-
-        return mapStatisticsToResponse(summaryStatistics);
+        if (queryByTimeFrame.isEmpty()) {
+            return Response.noContent().build();
+        } else {
+            DoubleSummaryStatistics summaryStatistics =
+                queryByTimeFrame.stream().mapToDouble(v -> v.getReadingValue())
+                    .summaryStatistics();
+            return Response.ok(mapStatisticsToResponse(summaryStatistics))
+                .build();
+        }
 
     }
-
-    // @GET
-    // @Path("{id}")
-    // @Produces(APPLICATION_JSON)
-    // public SensorData getAllReadings(@PathParam("id") String id) {
-    //
-    // return dao.queryById(id);
-    //
-    // }
 
     private GetSensorDataResponse mapStatisticsToResponse(DoubleSummaryStatistics summaryStatistics) {
 

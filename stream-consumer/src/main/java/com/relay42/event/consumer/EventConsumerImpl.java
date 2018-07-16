@@ -38,7 +38,7 @@ public class EventConsumerImpl implements EventConsumer {
                     SensorData sensorData = record.value();
                     LOGGER.log(Level.INFO,
                         "Received and saving sensor data into data store");
-                    dao.saveSensorData(sensorData);
+                    dao.save(sensorData);
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error while reading message: "
                         + record.value(), e.getMessage());
