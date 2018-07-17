@@ -13,8 +13,12 @@ import com.relay42.domain.SensorData;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class SensorDao implements Dao {
+
+    private static final Logger LOGGER = Logger.getLogger(SensorDao.class
+        .getName());
 
     private Mapper<SensorData> mapper;
     private Session session;
@@ -61,6 +65,9 @@ public class SensorDao implements Dao {
             return sensorData.all();
 
         } catch (IllegalArgumentException e) {
+
+            LOGGER.severe("Error ocurred while query sensor data: "
+                + e.getMessage());
             e.printStackTrace();
         }
         return null;
