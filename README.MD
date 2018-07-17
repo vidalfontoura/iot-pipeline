@@ -45,13 +45,13 @@ In order to start the sensor simulator
 	
 	java -jar target/sensor-simulator-1.0-SNAPSHOT-jar-with-dependencies.jar config.properties
 
-The config.properties should define the following configurations (An example was added in the $PROJECT_ROOT.
+The config.properties should define the following configurations (An example was added in the $PROJECT_ROOT).
     
-    - `topic.name` The Kafka topic name 
+    - topic.name: The Kafka topic name 
 
-	- `bootstrap.servers`  A comma separated list of servers:ports
+	- bootstrap.servers  A comma separated list of servers:ports
 
-	- `sensor.id` The id of the sensor, it will be used to identify the simulated sensor
+	- sensor.id The id of the sensor, it will be used to identify the simulated sensor
 
 If you to simulate multiple sensors change the sensor.id configuration and run the command again.
 
@@ -76,9 +76,17 @@ Finally let's build and run the web-service project.
 
 The above command will compile and deploy the web-service project.
 
-In order to get 
-    
+In order to obtain the sensor stats (average//max/min/count values) you can execute the following curl. 
+Note you will need to update start/end values with an time interval used to generate sensors reading by the sensor-simulator.
 
+
+curl -X POST -H "Content-Type: application/json" -d '{"sensorId":"sen1","start":"2018-07-16T23:14:18.000000Z", "end":"2018-07-16T23:15:39.486000Z"}' "http:/localhost:8080/web-service/services/sensor/"
+    
+The response should look like something like
+
+{"average":"0.49230806972078944","count":"79.0","max":"0.9968394599415784","min":"0.006311711200555514","sum":"38.892337507942365"}
+
+If there is not sensor data for the provided data the service will return 204 no content.
 
 
 
