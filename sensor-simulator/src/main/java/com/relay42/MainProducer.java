@@ -25,8 +25,6 @@ public class MainProducer {
     public static void main(String[] args) throws Exception {
 
         Properties props = new Properties();
-        // JsonSerializer<SensorData> sensorDataSerializer =
-        // new JsonSerializer<>();
         if (args.length == 1) {
             FileInputStream fileInputStream = new FileInputStream(args[0]);
             props.load(fileInputStream);

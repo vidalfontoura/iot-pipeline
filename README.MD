@@ -47,11 +47,11 @@ In order to start the sensor simulator
 
 The config.properties should define the following configurations (An example was added in the $PROJECT_ROOT).
     
-    - topic.name: The Kafka topic name 
+    - topic.name: The kafka topic name 
 
-	- bootstrap.servers  A comma separated list of servers:ports
+	- bootstrap.servers: Comma separated list of kafka brokers
 
-	- sensor.id The id of the sensor, it will be used to identify the simulated sensor
+	- sensor.id: The ids of the sensors you want to simulate. The default value is sen1,sen2,sen3 that will generate 3 sensors data. If you want more sensors you can add more here. This ids should be used for querying the data through the web-service
 
 If you to simulate multiple sensors change the sensor.id configuration and run the command again.
 
@@ -63,10 +63,17 @@ Now let's build the consumer project.
 
 And start it using:
 
-	java -jar target/consumer-1.0-SNAPSHOT-jar-with-dependencies.jar
+	java -jar target/consumer-1.0-SNAPSHOT-jar-with-dependencies.jar config.properties.
+
+The config.properties has the following properties:
+	- sensor.data.topic: The kafka topic name
+	- bootstrap.servers: Comma separated list of kafka brokers
+    - group.id: Identifies the group of consumer processes to which this consumer belongs. The broker will load balance between consumers of the same group.
+    - cassandra.servers: The cassandra clusters list of contact points
+    - cassandra.keyspace: The cassandra keyspace that was created by running the exec.cql script
 
 
-After starting sensor simulator, simulated sensor data will be generated and sent to the specified kafka topic. The consumer will receive the data and add it to cassandra.
+After starting sensor simulator, simulated sensor data will be generated and sent to the specified kafka topic. The consumer will receive the data and send it to cassandra.
 
 Finally let's build and run the web-service project.
 	
