@@ -7,14 +7,17 @@
          version="2.4">
     <display-name>An awesome REST API written with Jersey and Guice</display-name>
  
+	
 	<listener>
-		<listener-class>com.relay42.Main</listener-class>
-	</listener>
+ 	   <listener-class>com.relay42.GenericGuiceContextListener</listener-class>
+  	</listener>
 
 	<filter>
 		<filter-name>guiceFilter</filter-name>
 		<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
 	</filter>
+	
+	
 
 	<filter-mapping>
 		<filter-name>guiceFilter</filter-name>

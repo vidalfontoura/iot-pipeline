@@ -2,14 +2,12 @@ package com.relay42.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.relay42.dao.Dao;
-import com.relay42.domain.SensorData;
 import com.relay42.request.GetSensorDataRequest;
 import com.relay42.response.GetSensorDataResponse;
+import com.relay42.service.GetSensorService;
 
 import java.util.Date;
 import java.util.DoubleSummaryStatistics;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -18,38 +16,41 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 @Path("sensor")
 public class GetSensorDataRest {
 
-    private Dao dao;
+    private GetSensorService service;
 
     @Inject
-    public GetSensorDataRest(Dao dao) {
+    public GetSensorDataRest(GetSensorService service) {
 
-        this.dao = dao;
+        this.service = service;
     }
 
 
     @POST
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
+    @RequiresPermissions("getsensordata:allowed")
+    @RequiresAuthentication
     public Response getSensorStatistics(GetSensorDataRequest query) {
 
         String sensorId = query.getSensorId();
         Date startDate = query.getStart();
         Date endDate = query.getEnd();
 
-        List<SensorData> queryByTimeFrame =
-            dao.querySensorDataByTimeFrame(sensorId, startDate, endDate);
+        DoubleSummaryStatistics stats =
+            service.getSensorStats(sensorId, startDate, endDate);
 
-        if (queryByTimeFrame.isEmpty()) {
+        if (stats == null) {
             return Response.noContent().build();
         } else {
-            DoubleSummaryStatistics summaryStatistics =
-                queryByTimeFrame.stream().mapToDouble(v -> v.getReadingValue())
-                    .summaryStatistics();
-            return Response.ok(mapStatisticsToResponse(summaryStatistics))
-                .build();
+            GetSensorDataResponse mapStatisticsToResponse =
+                mapStatisticsToResponse(stats);
+            return Response.ok(mapStatisticsToResponse).build();
         }
 
     }
