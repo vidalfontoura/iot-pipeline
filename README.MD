@@ -87,13 +87,14 @@ In order to obtain the sensor stats (average//max/min/count values) you can exec
 Note you will need to update start/end values with an time interval used to generate sensors reading by the sensor-simulator.
 
 
-	curl -X POST -H "Content-Type: application/json" -d '{"sensorId":"sen1","start":"2018-07-16T23:14:18.000000Z", "end":"2018-07-16T23:15:39.486000Z"}' "http:/localhost:8080/web-service/services/sensor/"
+	curl -X POST -i --user relay42:secret -H "Content-Type: application/json" -d '{"sensorId":"sen1","start":"2018-07-17T00:52:28.000000Z", "end":"2018-07-17T00:52:56.000000Z"}' "http:/localhost:8080/web-service/services/sensor/"
     
 The response should look like something like
 
 	{"average":"0.49230806972078944","count":"79.0","max":"0.9968394599415784","min":"0.006311711200555514","sum":"38.892337507942365"}
 
-If there is not sensor data for the provided data the service will return 204 no content.
+If there is no sensor data for the provided sensorId and interval dates the service will return 204 no content.
+If the --user parameter is not allowed to access the resource it will return 401 unauthorized.
 
 
 
