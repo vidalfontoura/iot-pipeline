@@ -40,7 +40,7 @@ The partitions parameter it is an important configuration which defines the leve
 it will be possible to consume sensor readings using 5 consumers in parallel.
 The topic parameter is the topic name and should match with the topic name used by the sensor-simulator and the consumer.
 
-###Build the data-access library
+### Build the data-access library
 	
 	cd $PROJECT_ROOT/data-access
 
