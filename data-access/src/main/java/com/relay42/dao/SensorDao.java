@@ -66,9 +66,8 @@ public class SensorDao implements Dao {
 
         } catch (IllegalArgumentException e) {
 
-            LOGGER.severe("Error ocurred while query sensor data: "
+            LOGGER.severe("Error ocurred while queryin sensor data: "
                 + e.getMessage());
-            e.printStackTrace();
         }
         return null;
     }

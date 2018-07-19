@@ -1,4 +1,13 @@
 
+Description
+======================
+This repository contains the implementation of IoT pipeline for processing sensor data. The architecture utilizes [Apache Kafka](https://kafka.apache.org) as message broker and [Apache Cassandra](http://cassandra.apache.org) as database. The solution presented here is composed by 4 four components:
+
+	- data-access: Common library for storing shared classes among the applications.
+	- sensor-simulator: Responsible for generating sensor readings and publishing it to a kafka topic.
+	- consumer: Responsible for consuming the sensor readings and storing into cassandra keyspace.
+	- web-service: Exposes a REST service for querying the sensor readings statistics (average,sum,mix,max adnd count).
+	
 
 Dependencies
 ======================
@@ -66,10 +75,15 @@ And start it using:
 	java -jar target/consumer-1.0-SNAPSHOT-jar-with-dependencies.jar config.properties.
 
 The config.properties has the following properties:
+
 	- sensor.data.topic: The kafka topic name
+
 	- bootstrap.servers: Comma separated list of kafka brokers
+
     - group.id: Identifies the group of consumer processes to which this consumer belongs. The broker will load balance between consumers of the same group.
+
     - cassandra.servers: The cassandra clusters list of contact points
+
     - cassandra.keyspace: The cassandra keyspace that was created by running the exec.cql script
 
 
@@ -89,7 +103,7 @@ Note you will need to update start/end values with an time interval used to gene
 
 	curl -X POST -i --user relay42:secret -H "Content-Type: application/json" -d '{"sensorId":"sen1","start":"2018-07-17T00:52:28.000000Z", "end":"2018-07-17T00:52:56.000000Z"}' "http:/localhost:8080/web-service/services/sensor/"
     
-The response should look like something like
+The response body should look like the below json.
 
 	{"average":"0.49230806972078944","count":"79.0","max":"0.9968394599415784","min":"0.006311711200555514","sum":"38.892337507942365"}
 
@@ -99,14 +113,14 @@ If the --user parameter is not allowed to access the resource it will return 401
 
 Limitations
 ======================
-The implementation uses a Json Serializer and Deserializer a better. Althought, the json is not big using Avro for serialization/deserialization would be better with more payload data.
+The implementation uses a Json Serializer and Deserializer a better. Althought, the json is not big using Avro for serialization/deserialization would be better option while handling bigger payloads.
 
 The consumer application could make use of the Kafka Streams library in order to calculate the statistics (average,min,max,sum). But, when querying the data one wouldn't
 be able to pass any time interval because the data would be stored based on the defined time window on the stream agregator function e.g: daily,weekly.
 
-Sensor-simulator, consumer and the web services does not utilizes SSL.
+The applications does not communicate using SSL.
 
-The Consumer could start multiple threads to consume the topic. The way that was implemented it is necessary to manually start another instance in order to get more consumers consuming the topic.
+The consumer could start multiple threads to consume the topic. The way that was implemented it is necessary to manually start another instance in order to get more consumers consuming the topic.
 
 
 
