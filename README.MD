@@ -97,4 +97,17 @@ If there is no sensor data for the provided sensorId and interval dates the serv
 If the --user parameter is not allowed to access the resource it will return 401 unauthorized.
 
 
+Limitations
+======================
+The implementation uses a Json Serializer and Deserializer a better. Althought, the json is not big using Avro for serialization/deserialization would be better with more payload data.
+
+The consumer application could make use of the Kafka Streams library in order to calculate the statistics (average,min,max,sum). But, when querying the data one wouldn't
+be able to pass any time interval because the data would be stored based on the defined time window on the stream agregator function e.g: daily,weekly.
+
+Sensor-simulator, consumer and the web services does not utilizes SSL.
+
+The Consumer could start multiple threads to consume the topic. The way that was implemented it is necessary to manually start another instance in order to get more consumers consuming the topic.
+
+
+
 
