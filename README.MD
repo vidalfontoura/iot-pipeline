@@ -5,7 +5,7 @@ This repository contains the implementation of IoT pipeline for processing senso
 
 	- data-access: Common library for storing shared classes among the applications.
 	- sensor-simulator: A daemon responsible for generating sensor readings and publishing it to a kafka topic.
-	- consumer: Responsible for consuming the sensor readings and storing into cassandra keyspace.
+	- consumer: Daemon for consuming the sensor readings and storing into cassandra keyspace.
 	- web-service: Exposes a REST service for querying the sensor readings statistics (average,sum,mix,max adnd count).
 	
 
@@ -93,6 +93,7 @@ The config.properties has the following properties:
 
 After starting sensor simulator, simulated readings will be generated and sent to the specified kafka topic. The consumer will receive the data and send it to cassandra.
 Multiple consumers can be run in parallel running the command again and respecting the number of partitions defined in the topic creation.
+
 
 ### Build and Run the web-service project
 Finally let's build and run the web-service project.
