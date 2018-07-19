@@ -133,6 +133,8 @@ The consumer could start multiple threads to consume the topic. The way that was
 
 The web-services authentication relies on the [shiro.ini](web-service/src/main/resources/shiro.ini) file.
 
+Lack of unit testing.
+
 
 
 
