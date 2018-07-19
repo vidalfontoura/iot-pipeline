@@ -1,10 +1,10 @@
 
 Description
 ======================
-This repository contains the implementation of IoT pipeline for processing sensor data. The architecture utilizes [Apache Kafka](https://kafka.apache.org) as message broker and [Apache Cassandra](http://cassandra.apache.org) as database. The solution presented here is composed by 4 four components:
+This repository contains the implementation of IoT pipeline for processing sensor data. The architecture utilizes [Apache Kafka](https://kafka.apache.org) as message broker and [Apache Cassandra](http://cassandra.apache.org) as database. The solution presented here is composed by 4 components:
 
 	- data-access: Common library for storing shared classes among the applications.
-	- sensor-simulator: Responsible for generating sensor readings and publishing it to a kafka topic.
+	- sensor-simulator: A daemon responsible for generating sensor readings and publishing it to a kafka topic.
 	- consumer: Responsible for consuming the sensor readings and storing into cassandra keyspace.
 	- web-service: Exposes a REST service for querying the sensor readings statistics (average,sum,mix,max adnd count).
 	
@@ -40,31 +40,35 @@ The partitions parameter it is an important configuration which defines the leve
 it will be possible to consume sensor readings using 5 consumers in parallel.
 The topic parameter is the topic name and should match with the topic name used by the sensor-simulator and the consumer.
 
+###Build the data-access library
+	
+	cd $PROJECT_ROOT/data-access
+
+	mvn clean install
 
 ### Build and Run the sensor simulator
-Let's now build the sensor-simulator project.
-	
+Let's now build the sensor-simulator
 
 	cd $PROJECT_ROOT/sensor-simulator
 
     mvn clean compile assembly:single
     
-
 In order to start the sensor simulator 
 	
 	java -jar target/sensor-simulator-1.0-SNAPSHOT-jar-with-dependencies.jar config.properties
 
 The config.properties should define the following configurations (An example was added in the $PROJECT_ROOT).
     
-    - topic.name: The kafka topic name 
+    - topic.name: The kafka topic name.
 
-	- bootstrap.servers: Comma separated list of kafka brokers
+	- bootstrap.servers: Comma separated list of kafka brokers.
 
-	- sensor.id: The ids of the sensors you want to simulate. The default value is sen1,sen2,sen3 that will generate 3 sensors data. If you want more sensors you can add more here. This ids should be used for querying the data through the web-service
+	- sensor.id: The ids of the sensors you want to simulate. The default value is sen1,sen2,sen3 that will generate 3 sensors readings. If you want more sensors you can add more here. This ids should be used for querying the data through the web-service.
 
-If you to simulate multiple sensors change the sensor.id configuration and run the command again.
+You can leave it running for a time and kill it using Ctrl + Z when you think that enough data was generated.
 
-Now let's build the consumer project.
+### Build and Run consumer project
+Now let's build the consumer project.	
 
 	cd $PROJECT_ROOT/consumer
  	 
@@ -87,8 +91,10 @@ The config.properties has the following properties:
     - cassandra.keyspace: The cassandra keyspace that was created by running the exec.cql script
 
 
-After starting sensor simulator, simulated sensor data will be generated and sent to the specified kafka topic. The consumer will receive the data and send it to cassandra.
+After starting sensor simulator, simulated readings will be generated and sent to the specified kafka topic. The consumer will receive the data and send it to cassandra.
+Multiple consumers can be run in parallel running the command again and respecting the number of partitions defined in the topic creation.
 
+### Build and Run the web-service project
 Finally let's build and run the web-service project.
 	
 	cd $PROJECT_ROOT/web-service
@@ -98,10 +104,13 @@ Finally let's build and run the web-service project.
 The above command will compile and deploy the web-service project.
 
 In order to obtain the sensor stats (average//max/min/count values) you can execute the following curl. 
-Note you will need to update start/end values with an time interval used to generate sensors reading by the sensor-simulator.
-
+The web-service as enabled with a basic authorization using shiro. The allowed users can be found in [shiro.ini](web-service/src/main/resources/shiro.ini)
 
 	curl -X POST -i --user relay42:secret -H "Content-Type: application/json" -d '{"sensorId":"sen1","start":"2018-07-17T00:52:28.000000Z", "end":"2018-07-17T00:52:56.000000Z"}' "http:/localhost:8080/web-service/services/sensor/"
+
+
+Note you will need to change start/end values with an time interval that matches with the generated sensor readings.
+
     
 The response body should look like the below json.
 
@@ -113,7 +122,7 @@ If the --user parameter is not allowed to access the resource it will return 401
 
 Limitations
 ======================
-The implementation uses a Json Serializer and Deserializer a better. Althought, the json is not big using Avro for serialization/deserialization would be better option while handling bigger payloads.
+The implementation uses a json serializer and deserializer a more efficient approach would be using [Apache avro](https://avro.apache.org/) for serialization/deserialization would be better option while handling bigger payloads.
 
 The consumer application could make use of the Kafka Streams library in order to calculate the statistics (average,min,max,sum). But, when querying the data one wouldn't
 be able to pass any time interval because the data would be stored based on the defined time window on the stream agregator function e.g: daily,weekly.
@@ -121,6 +130,10 @@ be able to pass any time interval because the data would be stored based on the 
 The applications does not communicate using SSL.
 
 The consumer could start multiple threads to consume the topic. The way that was implemented it is necessary to manually start another instance in order to get more consumers consuming the topic.
+
+The web-services authentication relies on the [shiro.ini](web-service/src/main/resources/shiro.ini) file.
+
+
 
 
 

@@ -21,8 +21,6 @@ public class MainConsumer {
 
     private static final Logger LOGGER = Logger.getLogger(MainConsumer.class.getName());
 
-    private static final String NUMBER_OF_THREADS_KEY = "number.threads";
-
     public static void main(String[] args) throws Exception {
 
         Properties props = new Properties();
@@ -38,8 +36,6 @@ public class MainConsumer {
             StringDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
             JacksonReadingSerializer.class.getName());
-        
-        
 
         Injector injector = Guice.createInjector(new MainModule(props));
         EventConsumer consumer = injector.getInstance(EventConsumer.class);
